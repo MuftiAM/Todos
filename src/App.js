@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React, { useState } from "react";
+import TodoForm from "./TodoForm";
+import Todos from "./Todos";
 
-function App() {
+const App = () => {
+  const [todos, setTodos] = useState([]);
+
+  const markComplete = (id) => {
+    setTodos(
+      todos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, completed: !todo.completed };
+        }
+        return todo;
+      })
+    );
+  };
+
+  const addTodo = (title) => {
+    const newTodo = {
+      id: Math.random(),
+      title,
+      completed: false,
+    };
+    setTodos([...todos, newTodo]);
+  };
+
+  const deleteTodo = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <TodoForm addTodo={addTodo} />
+      <Todos
+        todos={todos}
+        markComplete={markComplete}
+        deleteTodo={deleteTodo}
+      />
     </div>
   );
-}
+};
 
 export default App;
